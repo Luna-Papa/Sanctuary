@@ -31,7 +31,7 @@ class BaseTables(models.Model):
 
 class DataUsers(models.Model):
     """数据下发用户"""
-    user_id = models.CharField(verbose_name='用户编号', max_length=10)
+    user_id = models.CharField(verbose_name='用户编号', max_length=10, primary_key=True)
     org_name = models.CharField(verbose_name='机构名称', max_length=100)
     ip_addr = models.GenericIPAddressField(verbose_name='IP地址')
     port = models.IntegerField(verbose_name='端口')

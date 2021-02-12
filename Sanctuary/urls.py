@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from apps.users.views import index, user_login
-from apps.sjxf.views import BaseTablesView
+from apps.sjxf.views import BaseTablesView, ManualSjxf, get_data_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path('login/', user_login, name='login'),
     path('sjxf/', BaseTablesView.as_view(), name='base_table'),
+    path('manualSjxf/', ManualSjxf.as_view()),
+    path('get_data_user/', get_data_user),
 ]
