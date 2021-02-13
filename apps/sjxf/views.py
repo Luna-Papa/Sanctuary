@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import View
-from sjxf.models import DataSub, DataUsers, BaseTables, TaskExecuteQueen
+from sjxf.models import DataSub, DataUsers, BaseTables, TaskExecuteQueen, DataRelation
 from django.http import JsonResponse
 
 
@@ -17,10 +17,16 @@ class BaseTablesView(View):
 class ManualSjxf(View):
     def get(self, request):
         users = list(DataUsers.objects.all().values('user_id', 'org_name'))
-        return render(request, 'sjxf/manualSJXF.html', {'data_users': users})
+        tables = list(BaseTables.objects.all().values('table_name'))
+        context = {
+            'data_users': users,
+            'tables': tables,
+        }
+        return render(request, 'sjxf/manualSJXF.html', context=context)
 
 
-def get_data_user(request):
-    if request.method == 'GET':
-        users = list(DataUsers.objects.all().values('user_id', 'org_name'))
-        return JsonResponse(users, safe=False)
+class DataRelationView(View):
+    def get(self, request):
+        relations = list(DataRelation.objects.all().
+                         values('user_id', 'org_name', 'ds_id', 'table_name', 'c_user_id', 'create_date'))
+        return render(request, 'sjxf/datarelations.html', {'relations': relations})

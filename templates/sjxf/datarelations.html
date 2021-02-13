@@ -33,7 +33,7 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>已下发基础表</h5>
+                    <h5>下发数据关系表</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -60,32 +60,35 @@
                             <thead>
                             <tr>
                                 <th>序号</th>
-                                <th>模式名</th>
+                                <th>机构号</th>
+                                <th>机构名称</th>
+                                <th>渠道号</th>
                                 <th>表名</th>
-                                <th>渠道名称</th>
-                                <th>表中文名</th>
+                                <th>村镇银行机构号</th>
                                 <th>创建时间</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for table in all_tables %}
+                            {% for relation in relations %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ table.creator }}</td>
-                                    <td>{{ table.table_name }}</td>
-                                    <td>{{ table.ds_id }}</td>
-                                    <td>{{ table.chn_name }}</td>
-                                    <td>{{ table.create_date }}</td>
+                                    <td>{{ relation.user_id }}</td>
+                                    <td>{{ relation.org_name }}</td>
+                                    <td>{{ relation.ds_id }}</td>
+                                    <td>{{ relation.table_name }}</td>
+                                    <td>{{ relation.c_user_id }}</td>
+                                    <td>{{ relation.create_date }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                             <tfoot>
                             <tr>
                                 <th>序号</th>
-                                <th>模式名</th>
+                                <th>机构号</th>
+                                <th>机构名称</th>
+                                <th>渠道号</th>
                                 <th>表名</th>
-                                <th>渠道名称</th>
-                                <th>表中文名</th>
+                                <th>村镇银行机构号</th>
                                 <th>创建时间</th>
                             </tr>
                             </tfoot>

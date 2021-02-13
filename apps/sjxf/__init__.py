@@ -1,1 +1,1 @@
-default_app_config = 'apps.sjxf.apps.SjxfConfig'
+default_app_config = 'sjxf.apps.SjxfConfig'

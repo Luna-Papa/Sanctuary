@@ -54,7 +54,7 @@ class DataUsers(models.Model):
 class DataSub(models.Model):
     """数据下发任务"""
     id = models.BigIntegerField(verbose_name='序号', primary_key=True)
-    user_id = models.CharField(verbose_name='机构编号', max_length=10)
+    user_id = models.CharField(verbose_name='机构编号', max_length=10, db_index=True)
     ds_id = models.CharField(verbose_name='渠道编号', max_length=10)
     ds_type = models.IntegerField(verbose_name='类型')
     t_id = models.CharField(max_length=50, verbose_name='数据表名')
@@ -70,6 +70,24 @@ class DataSub(models.Model):
     class Meta:
         verbose_name = '数据下发任务'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.user_id
+
+
+class DataRelation(models.Model):
+    id = models.BigIntegerField(verbose_name='序号', primary_key=True)
+    user_id = models.CharField(verbose_name='机构编号', max_length=10, db_index=True)
+    org_name = models.CharField(verbose_name='机构名称', max_length=100)
+    ds_id = models.CharField(verbose_name='渠道编号', max_length=10)
+    table_name = models.CharField(verbose_name='下发表名', max_length=100)
+    c_user_id = models.CharField(verbose_name='村镇银行编号', max_length=10)
+    create_date = models.DateTimeField(verbose_name='创建日期', null=True)
+
+    class Meta:
+        verbose_name = '数据下发关系'
+        verbose_name_plural = verbose_name
+        ordering = ['user_id', 'ds_id']
 
     def __str__(self):
         return self.user_id

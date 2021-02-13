@@ -13,16 +13,12 @@
 
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
-    <!-- Toastr style -->
-    <link href="{% static 'css/plugins/toastr/toastr.min.css' %}" rel="stylesheet">
-    <!-- Gritter -->
-    <link href="{% static 'js/plugins/gritter/jquery.gritter.css' %}" rel="stylesheet">
-
-    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
     {% block custom_css %}
     {% endblock %}
+
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
 </head>
 
@@ -52,25 +48,45 @@
                         </div>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-table"></i> <span class="nav-label">数据下发</span><span class="fa arrow"></span></a>
+                        <a href="#">
+                            <i class="fa fa-table"></i>
+                            <span class="nav-label">数据下发</span>
+                            <span class="fa arrow"></span>
+                        </a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="#">已下发数据表</a></li>
-                            <li><a href="#">数据下发配置</a></li>
-                            <li><a href="#">手工下发数据</a></li>
+                            <li>
+                                <a href="{% url 'get_base_table' %}">已下发数据表</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'get_data_relation' %}">数据下发关系</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'manual_sjxf' %}">手工下发数据</a>
+                            </li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">数据查询</span><span class="fa arrow"></span></a>
+                        <a href="#">
+                            <i class="fa fa-th-large"></i>
+                            <span class="nav-label">数据查询</span>
+                            <span class="fa arrow"></span>
+                        </a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="#">交易对手信息查询</a></li>
                             <li><a href="#">客户账户信息查询</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Menu Levels </span><span class="fa arrow"></span></a>
+                        <a href="#">
+                            <i class="fa fa-sitemap"></i>
+                            <span class="nav-label">Menu Levels </span>
+                            <span class="fa arrow"></span>
+                        </a>
                         <ul class="nav nav-second-level collapse">
                             <li>
-                                <a href="#" id="damian">Third Level <span class="fa arrow"></span></a>
+                                <a href="#" id="damian">Third Level
+                                    <span class="fa arrow"></span>
+                                </a>
                                 <ul class="nav nav-third-level">
                                     <li>
                                         <a href="#">Third Level Item</a>
@@ -231,66 +247,14 @@
     <script src="/static/js/jquery-3.1.1.min.js"></script>
     <script src="/static/js/popper.min.js"></script>
     <script src="/static/js/bootstrap.js"></script>
-    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <!-- Flot -->
-    <script src="/static/js/plugins/flot/jquery.flot.js"></script>
-    <script src="/static/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-    <script src="/static/js/plugins/flot/jquery.flot.spline.js"></script>
-    <script src="/static/js/plugins/flot/jquery.flot.resize.js"></script>
-    <script src="/static/js/plugins/flot/jquery.flot.pie.js"></script>
-
-    <!-- Peity -->
-    <script src="/static/js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="/static/js/demo/peity-demo.js"></script>
-
-    <!-- Custom and plugin javascript -->
-    <script src="/static/js/inspinia.js"></script>
-    <script src="/static/js/plugins/pace/pace.min.js"></script>
-
-    <!-- jQuery UI -->
-    <script src="/static/js/plugins/jquery-ui/jquery-ui.min.js"></script>
-
-    <!-- GITTER -->
-    <script src="/static/js/plugins/gritter/jquery.gritter.min.js"></script>
-
-    <!-- Sparkline -->
-    <script src="/static/js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
-    <!-- Sparkline demo data  -->
-    <script src="/static/js/demo/sparkline-demo.js"></script>
-
-    <!-- ChartJS-->
-    <script src="/static/js/plugins/chartJs/Chart.min.js"></script>
-
-    <!-- Toastr -->
-    <script src="/static/js/plugins/toastr/toastr.min.js"></script>
-    
     {% block custom_js %}
-    
+        <!-- lead into require js -->
     {% endblock %}
 
-    <script>
-        $(document).ready(function() {
+    {% block custom_page_js %}
+        <!-- add js in html -->
+    {% endblock %}
 
-            let toast = $('.toast');
-
-            setTimeout(function() {
-                toast.toast({
-                    delay: 5000,
-                    animation: true
-                });
-                toast.toast('show');
-
-            }, 2200);
-        });
-
-        $(window).bind("scroll", function () {
-            let toast = $('.toast');
-            toast.css("top", window.pageYOffset + 20);
-
-        });
-    </script>
 </body>
 </html>
