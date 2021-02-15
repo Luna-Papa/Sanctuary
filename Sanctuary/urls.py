@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path('login/', user_login, name='login'),
-    path('sjxf/', include('sjxf.urls')),
+    path('sjxf/', include('sjxf.urls')),  # 【数据下发】应用
+    path('dataexp/', include('dataexp.urls'))  # 【数据提取】应用
 ]
