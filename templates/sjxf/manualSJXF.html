@@ -53,36 +53,37 @@
                     </a>
                 </div>
             </div>
-                <!-- form 1 -->
+                <!-- form : 农商银行选择 -->
                 <div class="ibox-content">
                     <p></p>
-                    <form id="form" action="#" class="wizard-big">
+                    <form id="user-form" action="#" class="wizard-big">
                         {% csrf_token %}
                         <select class="form-control dual_select" multiple id="DataUsers">
                             {% for data_user in data_users %}
                                 <option value="{{ data_user.user_id }}">
-                                    {{ data_user.org_name }}
+                                    {{ data_user.user_id }} | {{ data_user.org_name }}
                                 </option>
                             {% endfor %}
                         </select>
                     </form>
-                    <div class="form-group row" style="margin-top: 10px">
-                        <div class="col-sm-6">
-                            <div class="i-checks">
-                                <label class="">
-                                    <div class="icheckbox_square-green" style="position: relative;">
-                                        <input type="checkbox" value="" style="position: absolute; opacity: 0;">
-                                        <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%;
-                                        display: block; width: 100%; height: 100%; margin: 0px; padding: 0px;
-                                        background: rgb(255, 255, 255); border: 0px; opacity: 0;">
-                                        </ins>
-                                    </div>
-                                    <i></i>
-                                    为选中机构下发所有表全量数据
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+{#                    <div class="form-group row" style="margin-top: 10px">#}
+{#                        <div class="col-sm-6">#}
+{#                            <div class="i-checks">#}
+{#                                <label class="">#}
+{#                                    <div class="icheckbox_square-green" style="position: relative;">#}
+{#                                        <input type="checkbox" value="" style="position: absolute; opacity: 0;"#}
+{#                                        id="user_ql">#}
+{#                                        <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%;#}
+{#                                        display: block; width: 100%; height: 100%; margin: 0px; padding: 0px;#}
+{#                                        background: rgb(255, 255, 255); border: 0px; opacity: 0;">#}
+{#                                        </ins>#}
+{#                                    </div>#}
+{#                                    <i></i>#}
+{#                                    为选中机构下发所有表全量数据#}
+{#                                </label>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
                 </div>
             </div>
         </div>
@@ -112,36 +113,37 @@
                     </a>
                 </div>
             </div>
-                <!-- form 2 -->
+                <!-- form : 数据表选择  -->
                 <div class="ibox-content">
                     <p></p>
-                    <form id="form" action="#" class="wizard-big">
+                    <form id="table-form" action="#" class="wizard-big">
                         {% csrf_token %}
                         <select class="form-control dual_select" multiple id="Tables">
                             {% for table in tables %}
-                                <option value="{{ table.table_name }}">
-                                    {{ table.table_name }}
+                                <option value="{{ table.id }}">
+                                    {{ table.ds_id }}.{{ table.table_name }}
                                 </option>
                             {% endfor %}
                         </select>
                     </form>
-                    <div class="form-group row" style="margin-top: 10px">
-                        <div class="col-sm-6">
-                            <div class="i-checks">
-                                <label class="">
-                                    <div class="icheckbox_square-green" style="position: relative;">
-                                        <input type="checkbox" value="" style="position: absolute; opacity: 0;">
-                                        <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%;
-                                        display: block; width: 100%; height: 100%; margin: 0px; padding: 0px;
-                                        background: rgb(255, 255, 255); border: 0px; opacity: 0;">
-                                        </ins>
-                                    </div>
-                                    <i></i>
-                                    为选中表下发所有机构
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+{#                    <div class="form-group row" style="margin-top: 10px">#}
+{#                        <div class="col-sm-6">#}
+{#                            <div class="i-checks">#}
+{#                                <label class="">#}
+{#                                    <div class="icheckbox_square-green" style="position: relative;">#}
+{#                                        <input type="checkbox" value="" style="position: absolute; opacity: 0;"#}
+{#                                        id="table_ql">#}
+{#                                        <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%;#}
+{#                                        display: block; width: 100%; height: 100%; margin: 0px; padding: 0px;#}
+{#                                        background: rgb(255, 255, 255); border: 0px; opacity: 0;">#}
+{#                                        </ins>#}
+{#                                    </div>#}
+{#                                    <i></i>#}
+{#                                    为选中表下发所有机构#}
+{#                                </label>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
                 </div>
             </div>
         </div>
@@ -153,7 +155,7 @@
                 <div class="form-group row">
                     <div class="col-sm-4 col-sm-offset-2">
                         <button class="btn btn-white btn-sm" type="submit" style="margin-right: 5px">取消</button>
-                        <button class="btn btn-primary btn-sm" type="submit">提交</button>
+                        <button class="btn btn-primary btn-sm removeall" type="submit" id="submit">提交</button>
                     </div>
                 </div>
             </div>
@@ -221,6 +223,46 @@
                 selectorMinimalHeight: 160
             });
         });
+
+        $(function () {
+            $('#submit').click(function () {
+                <!-- 必须同时选择机构和数据表，任一为空告警 -->
+                const select_users =
+                    $('#user-form > div > div.box2.col-md-6 > select > option:nth-child(1)').val();
+                const select_tables =
+                    $('#table-form > div > div.box2.col-md-6 > select > option:nth-child(1)').val();
+                if (select_users === undefined || select_tables === undefined) alert("未选择机构或数据表！");
+                <!-- 外层循环 ：机构 -->
+                <!-- 内层循环 ：数据表 -->
+                let count = 0;
+                $('#DataUsers').find('option:selected').each(function () {
+                    const user = $(this).val()
+                    console.log($(this).text())
+                    $('#Tables').find('option:selected').each(function () {
+                        count = count + 1;
+                        const table_id = $(this).val()
+                        console.log($(this).text())
+                        $.ajax({
+                            url: '',
+                            type: 'post',
+                            data: {
+                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                'org_no': user,
+                                'table_id': table_id,
+                            },
+                            success: function (data) {
+                                console.log(data)
+                                console.log("提交成功")
+                            }
+                        })
+                    })
+                });
+                <!-- 完成提交后刷新页面 -->
+                alert("您本次提交了" + count + "个下发任务，后台将陆续进行处理，请耐心等待。")
+                window.location.reload();
+            });
+        });
+
     </script>
 
 {% endblock %}

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'users',  # 用户管理
     'sjxf',  # 数据下发
     'dataquery',  # 数据查询
+    'dataexp',  # 测试数据提取
 ]
 
 MIDDLEWARE = [
@@ -151,4 +152,3 @@ timezone = TIME_ZONE
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # Broker配置，使用Redis作为消息中间件
 CELERY_RESULT_SERIALIZER = 'json'  # 结果序列化方案
-
