@@ -37,14 +37,20 @@ class SystemInfo(models.Model):
 
 class ExpTaskList(models.Model):
     task_no = models.CharField(max_length=15, verbose_name='任务编号', db_index=True)
-    user_id = models.CharField(max_length=20, verbose_name='提交人')
+    user_id = models.CharField(max_length=20, verbose_name='提交人', default='admin')
     username = models.CharField(verbose_name='提交人姓名', max_length=50)
     sys_name = models.CharField(verbose_name='系统名', max_length=50)
     table_name = models.CharField(verbose_name='数据表名', max_length=100)
     file_type = models.CharField(verbose_name='导出文件格式',
-                                 choices=(('txt', 'txt'), ('ixf', 'ixf')), max_length=10)
+                                 choices=(('txt', 'txt'), ('ixf', 'ixf')), max_length=3)
     exp_method = models.CharField(verbose_name='导出方式',
                                   choices=(('exp', 'exp'), ('hpu', 'hpu')), max_length=10)
+    code_page = models.CharField(verbose_name='编码格式', max_length=10,
+                                 choices=(('1386', '1386'), ('1208', '1208')))
+    separator = models.CharField(verbose_name='导出字段分隔符', max_length=10, null=True, blank=True,
+                                 help_text='不指定则默认为，')
+    delimiter = models.CharField(verbose_name='字段限定符', max_length=10, null=True, blank=True,
+                                 help_text='不指定则默认为"')
     work_date = models.DateField(verbose_name='数据日期')
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated_time = models.DateTimeField(auto_now=True, verbose_name='上次修改时间')
