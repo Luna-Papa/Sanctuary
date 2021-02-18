@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
+    'django_celery_beat',
     'users',  # 用户管理
     'sjxf',  # 数据下发
     'dataquery',  # 数据查询

@@ -11,7 +11,8 @@ class BaseTablesView(View):
     """下发表列表"""
     def get(self, request):
         all_tables = BaseTables.objects.filter(flag=0)
-        return render(request, 'sjxf/basetables.html', {'all_tables': all_tables})
+        return render(request, 'sjxf/basetables.html',
+                      {'all_tables': all_tables, 'sjxf_nav_active': True})
 
 
 class ManualSjxf(View):
@@ -21,6 +22,7 @@ class ManualSjxf(View):
         context = {
             'data_users': users,
             'tables': tables,
+            'sjxf_nav_active': True,
         }
         return render(request, 'sjxf/manualSJXF.html', context=context)
 
@@ -37,7 +39,6 @@ class ManualSjxf(View):
         tb_name = queryset.table_name
         # 调用celery异步任务
         data_push.delay(ds_id, org_no, tb_name, table_id)
-
         return HttpResponse('add task success.')
 
 
@@ -45,7 +46,7 @@ class DataRelationView(View):
     def get(self, request):
         relations = list(DataRelation.objects.all().
                          values('user_id', 'org_name', 'ds_id', 'table_name', 'c_user_id', 'create_date'))
-        return render(request, 'sjxf/datarelations.html', {'relations': relations})
+        return render(request, 'sjxf/datarelations.html', {'relations': relations, 'sjxf_nav_active': True})
 
 
 

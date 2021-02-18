@@ -4,4 +4,10 @@ from dataexp.models import SystemInfo, ExpTaskList
 
 
 def exp_register(request):
-    pass
+    systems = SystemInfo.objects.all()
+    context = {
+        'systems': systems,
+        'data_exp_nav_active': True,
+    }
+    return render(request, 'dataexp/registration.html', context=context)
+
