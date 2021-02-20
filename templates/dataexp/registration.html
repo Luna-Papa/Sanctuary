@@ -55,18 +55,25 @@
                         <form class="m-t-md" action="#">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">选择登记方式</label>
-                                <div class="col-sm-8" aria-required="true">
-                                    <select class="select2_demo_1 form-control">
+                                <div class="col-sm-6" aria-required="true">
+                                    <select class="select2_demo_1 form-control" id="register_type">
                                         <option></option>
-                                        <option value=0>手工填写</option>
-                                        <option value=1>文件上传</option>
+                                        <option value='manual'>手工填写</option>
+                                        <option value='upload'>文件上传</option>
                                     </select>
                                 </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-info btn-lg" type="submit"
+                                            style="margin-left: 10px"
+                                            onclick="download_template()">
+                                        模板下载
+                                    </button>
+                                </div>
                             </div>
-                            <div class="hr-line-dashed"></div>
-                            <div class="form-group row">
+                            <div class="hr-line-dashed toggle-show"></div>
+                            <div class="form-group row toggle-show">
                                 <label class="col-sm-2 col-form-label">选择数据源</label>
-                                <div class="col-sm-8" aria-required="true">
+                                <div class="col-sm-6" aria-required="true">
                                     <select class="select2_demo_1 form-control">
                                         <option></option>
                                         {% for system in systems %}
@@ -76,21 +83,21 @@
                                     <span class="form-text"></span>
                                 </div>
                             </div>
-                            <div class="hr-line-dashed"></div>
-                            <div class="form-group row table_name_input">
+                            <div class="hr-line-dashed toggle-show"></div>
+                            <div class="form-group row table_name_input toggle-show">
                                 <label class="col-sm-2 col-form-label">输入数据表名</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-6">
                                     <input type="text" class="form-control" placeholder="" name="table_1" aria-required="true">
                                     <span class="form-text"></span>
                                 </div>
-                                <div class="col-sm-2 form-group row">
+                                <div class="col-sm-2 form-group row toggle-show">
                                     <a class="col-sm-2 col-form-label" onclick="addTableInput()">
                                         <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
-                            <div class="hr-line-dashed"></div>
-                            <div class="form-group row">
+                            <div class="hr-line-dashed toggle-show"></div>
+                            <div class="form-group row toggle-show">
                                 <label class="col-sm-2 col-form-label">导出格式</label>
                                 <div class="col-sm-4">
                                     <div class="i-checks">
@@ -122,52 +129,57 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="hr-line-dashed"></div>
-                            <div class="form-group row">
-                                <div class="col-sm-6">
-                                    <label class="col-sm-4 col-form-label">字符串定界符</label>
-                                    <div class="col-sm-8">
+                            <div class="hr-line-dashed toggle-show"></div>
+                            <div class="form-group row col-sm-12 toggle-show">
+                                <div class="col-sm-5 row">
+                                    <label class="font-norma">字符串定界符</label>
+                                    <div class="input-group">
                                         <input type="text" placeholder='default:  " "' class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <label class="col-sm-4 col-form-label">字符列定界符</label>
-                                    <div class="col-sm-8">
+                                <div class="col-sm-2 row"></div>
+                                <div class="col-sm-5 row">
+                                    <label class="font-norma">字符列定界符</label>
+                                    <div class="input-group">
                                         <input type="text" placeholder='default:  , ' class="form-control">
                                     </div>
                                 </div>
                             </div>
-                            <div class="hr-line-dashed"></div>
-                            <div class="form-group row table_name_input">
-                                <label class="col-sm-2 col-form-label">导出路径</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" placeholder="" name="exp_path" aria-required="true">
-                                    <span class="form-text"></span>
+                            <div class="hr-line-dashed toggle-show"></div>
+                            <div class="form-group row col-sm-12 toggle-show" id="data_1">
+                                <div class="col-sm-5 row">
+                                    <label class="font-norma">导出路径</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="" name="exp_path" aria-required="true">
+                                        <span class="form-text"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 row toggle-show"></div>
+                                <div class="col-sm-5 row toggle-show" >
+                                    <label class="font-norma">选择数据日期</label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                        <input type="text" class="form-control" value="{% now "Y-m-d" %}">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="hr-line-dashed"></div>
-                            <div class="form-group row col-sm-4" id="data_1">
-                                <label class="font-normal">选择数据日期</label>
-                                <div class="input-group date">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
-                                    <input type="text" class="form-control" value="{% now "Y-m-d" %}">
-                                </div>
-                            </div>
-                            <div class="hr-line-dashed"></div>
-                            <div class="form-group row col-sm-4">
-                                <div class="custom-file">
+                            <div class="hr-line-dashed toggle-show"></div>
+                            <div class="hr-line-dashed toggle-show toggle-hide" style="display: none"></div>
+                            <div class="form-group row col-sm-12 toggle-hide" style="display: none">
+                                <div class="custom-file col-sm-5">
                                     <input id="logo" type="file" class="custom-file-input">
                                     <label for="logo" class="custom-file-label">选择文件...</label>
                                 </div>
+                                <div class="col-sm-1"></div>
                             </div>
-                            <div class="hr-line-dashed"></div>
+                            <div class="hr-line-dashed toggle-hide" style="display: none"></div>
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <button class="btn btn-white btn-lg col-sm-1" type="submit">取消</button>
-                                    <button class="btn btn-info btn-lg col-sm-1" type="submit" style="margin-left: 10px">模板下载</button>
-                                    <button class="btn btn-primary btn-lg col-sm-1" type="submit" style="margin-left: 10px">提交</button>
+                                    <button class="btn btn-primary btn-lg col-sm-1" type="submit"
+                                            style="margin-left: 40px">提交</button>
                                 </div>
                             </div>
                         </form>
@@ -223,21 +235,22 @@
 {% block custom_page_js %}
 
     <script>
+
         $(document).ready(function(){
-            const mem = $('#data_1 .input-group.date').datepicker({
+            $('#data_1 .input-group.date').datepicker({
                 todayBtn: "linked",
                 keyboardNavigation: false,
                 forceParse: false,
-                calendarWeeks: true,
+                {#calendarWeeks: true,#}
                 autoclose: true,
                 format: "yyyy-mm-dd",
                 todayHighlight: true,
+                <!-- 只允许选择今天和之后的日期 -->
+                beforeShowDay: function(date){
+                    const today = new Date()
+                    return date >= today;
+                }
             });
-
-            const yearsAgo = new Date();
-            yearsAgo.setFullYear(yearsAgo.getFullYear());
-
-            $('#selector').datepicker('setDate', yearsAgo );
 
             $('.i-checks').iCheck({
                 checkboxClass: 'icheckbox_square-green',
@@ -255,9 +268,9 @@
             const table_input_num = table_inputs.length
             const last_table_input = $('.table_name_input:last')
             last_table_input.after(`
-                <div class="form-group row table_name_input">
+                <div class="form-group row table_name_input toggle-show">
                     <label class="col-sm-2 col-form-label">输入数据表名</label>
-                    <div class="col-sm-8">
+                    <div class="col-sm-6">
                         <input type="text" class="form-control" placeholder=""
                            name="table_${table_input_num+1}">
                         <span class="form-text"></span>
@@ -286,6 +299,24 @@
             let fileName = $(this).val().split('\\').pop();
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
+
+        <!-- 根据登记方式显示表单输入项 -->
+        $('#register_type').change(function () {
+            const register_type = $(this).children('option:selected').val()
+            if (register_type === 'upload') {
+                $('.toggle-show').hide()
+                $('.toggle-hide').show()
+            }
+            else if (register_type === 'manual') {
+                $('.toggle-show').show()
+                $('.toggle-hide').hide()
+            }
+        });
+
+        <!-- 下载模板 -->
+        function download_template() {
+
+        }
 
     </script>
 
