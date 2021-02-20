@@ -52,11 +52,14 @@
                     <div class="ibox-content">
                         <h3></h3>
                         <p></p>
-                        <form class="m-t-md" action="#">
+                        <form class="m-t-md" enctype="multipart/form-data"
+                              action="{% url 'exp_register' %}" method="post">
+                            {% csrf_token %}
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">选择登记方式</label>
                                 <div class="col-sm-6" aria-required="true">
-                                    <select class="select2_demo_1 form-control" id="register_type">
+                                    <select class="select2_demo_1 form-control" id="register_type"
+                                            name="register_type">
                                         <option></option>
                                         <option value='manual'>手工填写</option>
                                         <option value='upload'>文件上传</option>
@@ -64,9 +67,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <button class="btn btn-info btn-lg" type="submit"
-                                            style="margin-left: 10px"
-                                            onclick="download_template()">
-                                        模板下载
+                                            style="margin-left: 10px">
+                                        <a href="{% url 'download_template' %}" style="color: white">模板下载</a>
                                     </button>
                                 </div>
                             </div>
@@ -74,7 +76,7 @@
                             <div class="form-group row toggle-show">
                                 <label class="col-sm-2 col-form-label">选择数据源</label>
                                 <div class="col-sm-6" aria-required="true">
-                                    <select class="select2_demo_1 form-control">
+                                    <select class="select2_demo_1 form-control" name="sys_name">
                                         <option></option>
                                         {% for system in systems %}
                                             <option value="{{ system.sys_name }}">{{ system.chn_name }}</option>
@@ -87,7 +89,8 @@
                             <div class="form-group row table_name_input toggle-show">
                                 <label class="col-sm-2 col-form-label">输入数据表名</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="" name="table_1" aria-required="true">
+                                    <input type="text" class="form-control" placeholder="" aria-required="true"
+                                           name="table_1">
                                     <span class="form-text"></span>
                                 </div>
                                 <div class="col-sm-2 form-group row toggle-show">
@@ -134,14 +137,16 @@
                                 <div class="col-sm-5 row">
                                     <label class="font-norma">字符串定界符</label>
                                     <div class="input-group">
-                                        <input type="text" placeholder='default:  " "' class="form-control">
+                                        <input type="text" placeholder='default:  " "' class="form-control"
+                                               name="delimiter">
                                     </div>
                                 </div>
                                 <div class="col-sm-2 row"></div>
                                 <div class="col-sm-5 row">
                                     <label class="font-norma">字符列定界符</label>
                                     <div class="input-group">
-                                        <input type="text" placeholder='default:  , ' class="form-control">
+                                        <input type="text" placeholder='default:  , ' class="form-control"
+                                               name="separator">
                                     </div>
                                 </div>
                             </div>
@@ -161,7 +166,8 @@
                                         <span class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </span>
-                                        <input type="text" class="form-control" value="{% now "Y-m-d" %}">
+                                        <input type="text" class="form-control" value="{% now "Y-m-d" %}"
+                                               name="work_date">
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +175,7 @@
                             <div class="hr-line-dashed toggle-show toggle-hide" style="display: none"></div>
                             <div class="form-group row col-sm-12 toggle-hide" style="display: none">
                                 <div class="custom-file col-sm-5">
-                                    <input id="logo" type="file" class="custom-file-input">
+                                    <input id="logo" type="file" class="custom-file-input" name="file">
                                     <label for="logo" class="custom-file-label">选择文件...</label>
                                 </div>
                                 <div class="col-sm-1"></div>
@@ -182,6 +188,7 @@
                                             style="margin-left: 40px">提交</button>
                                 </div>
                             </div>
+                            <input style="display: none" name="table_counts" value=1>
                         </form>
                     </div>
                 </div>
@@ -285,13 +292,15 @@
                     </div>
                 </div>
                                 `)
+            $("input[name='table_counts']").val(table_input_num+1);
         }
         <!-- 动态减少表单数据表输入行 -->
         function  removeTableInput() {
             const table_input_num = $('.table_name_input').length
             const last_table_input = $('.table_name_input:last')
             if (table_input_num > 1) {
-                last_table_input.remove()
+                last_table_input.remove();
+                $("input[name='table_counts']").val(table_input_num-1);
             }
         }
 
@@ -312,11 +321,6 @@
                 $('.toggle-hide').hide()
             }
         });
-
-        <!-- 下载模板 -->
-        function download_template() {
-
-        }
 
     </script>
 
