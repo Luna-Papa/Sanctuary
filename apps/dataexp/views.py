@@ -24,9 +24,9 @@ def exp_register(request):
             sys_name = SystemInfo.objects.get(sys_name=request.POST.get("sys_name"))
             user_name = request.user.username if request.user.username else 'admin'
             real_name = UserInfo.objects.get(username=user_name)
-            file_type = request.POST.get("file_type")
-            exp_method = 'hpu'
-            code_page = request.POST.get("codepage")
+            file_type = request.POST.get("file_type") if request.POST.get("file_type") else 'ixf'
+            exp_method = request.POST.get("exp_method") if request.POST.get("exp_method") else 'hpu'
+            code_page = request.POST.get("codepage") if request.POST.get("codepage") else '1386'
             delimiter = request.POST.get("delimiter")
             separator = request.POST.get("separator")
             work_date = request.POST.get("work_date")
@@ -79,5 +79,5 @@ def download_template(request):
     with open('static/files/template_dataexp.xlsx', 'rb') as f:
         response = HttpResponse(f)
         response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = 'attachment;filename="DataExpTemplate.xlsx"'
+        response['Content-Disposition'] = 'attachment;filename="填写模板.xlsx"'
         return response
