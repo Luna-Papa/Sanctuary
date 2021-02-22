@@ -25,102 +25,63 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class="row">
-
-        <div class="col-lg-6" style="padding-right: 0">
-            <div class="ibox">
-                <!-- title -->
-                <div class="ibox-title">
-                <h5>选择要下发的机构</h5>
-                <div class="ibox-tools">
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a>
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-wrench"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li>
-                            <a href="#" class="dropdown-item"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-item"></a>
-                        </li>
-                    </ul>
-                    <a class="close-link">
-                        <i class="fa fa-times"></i>
-                    </a>
-                </div>
-            </div>
-                <!-- form : 农商银行选择 -->
-                <div class="ibox-content">
-                    <p></p>
-                    <form id="user-form" action="#" class="wizard-big">
-                        {% csrf_token %}
-                        <select class="form-control dual_select" multiple id="DataUsers">
-                            {% for data_user in data_users %}
-                                <option value="{{ data_user.user_id }}">
-                                    {{ data_user.user_id }} | {{ data_user.org_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6" style="padding-left: 0">
-            <div class="ibox">
-                <!-- title -->
-                <div class="ibox-title">
-                <h5>选择要下发的表</h5>
-                <div class="ibox-tools">
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a>
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-wrench"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li>
-                            <a href="#" class="dropdown-item"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-item"></a>
-                        </li>
-                    </ul>
-                    <a class="close-link">
-                        <i class="fa fa-times"></i>
-                    </a>
-                </div>
-            </div>
-                <!-- form : 数据表选择  -->
-                <div class="ibox-content">
-                    <p></p>
-                    <form id="table-form" action="#" class="wizard-big">
-                        {% csrf_token %}
-                        <select class="form-control dual_select" multiple id="Tables">
-                            {% for table in tables %}
-                                <option value="{{ table.id }}">
-                                    {{ table.ds_id }}.{{ table.table_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-12" >
-            <div class="ibox">
-                <div class="form-group row">
-                    <div class="col-sm-4 col-sm-offset-2">
-                        <button class="btn btn-white btn-sm" type="submit" style="margin-right: 5px">取消</button>
-                        <button class="btn btn-primary btn-sm removeall" type="submit" id="submit">提交</button>
+    <div class="wrapper wrapper-content animated fadeIn">
+        <div class="ibox-content">
+            <div class="row col-lg-12 form-group" style="margin-top: 20px">
+                <div class="col-lg-6" style="padding-right: 0">
+                    <div class="ibox">
+                        <!-- title -->
+                        <div class="ibox-title">
+                            <h5>选择要下发的机构</h5>
+                        </div>
+                        <!-- form : 农商银行选择 -->
+                        <div class="ibox-content">
+                            <p></p>
+                            <form id="user-form" action="#" class="wizard-big">
+                                {% csrf_token %}
+                                <select class="form-control dual_select" multiple id="DataUsers">
+                                    {% for data_user in data_users %}
+                                        <option value="{{ data_user.user_id }}">
+                                            {{ data_user.user_id }} | {{ data_user.org_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
                     </div>
+                </div>
+                <div class="col-lg-6" style="padding-left: 0">
+                    <div class="ibox">
+                        <!-- title -->
+                        <div class="ibox-title">
+                            <h5>选择要下发的表</h5>
+                        </div>
+                        <!-- form : 数据表选择  -->
+                        <div class="ibox-content">
+                            <p></p>
+                            <form id="table-form" action="#" class="wizard-big">
+                                {% csrf_token %}
+                                <select class="form-control dual_select" multiple id="Tables">
+                                    {% for table in tables %}
+                                        <option value="{{ table.id }}">
+                                            {{ table.ds_id }}.{{ table.table_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="row form-group col-sm-12">
+                <div class="col-sm-4 col-sm-offset-2">
+                    <button class="btn btn-white btn-lg" type="submit" style="margin-right: 40px">
+                        取消
+                    </button>
+                    <button class="btn btn-primary btn-lg" type="submit" id="submit">
+                        提交
+                    </button>
                 </div>
             </div>
         </div>
@@ -201,11 +162,9 @@
                 let count = 0;
                 $('#DataUsers').find('option:selected').each(function () {
                     const user = $(this).val()
-                    console.log($(this).text())
                     $('#Tables').find('option:selected').each(function () {
                         count = count + 1;
                         const table_id = $(this).val()
-                        console.log($(this).text())
                         $.ajax({
                             url: '',
                             type: 'post',

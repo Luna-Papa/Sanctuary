@@ -10,7 +10,7 @@ import uuid
 
 def exp_register(request):
     if request.method == "GET":
-        systems = SystemInfo.objects.all()
+        systems = SystemInfo.objects.filter(val_flag=True)
         context = {
             'systems': systems,
             'data_exp_nav_active': True,

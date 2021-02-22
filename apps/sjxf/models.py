@@ -93,7 +93,7 @@ class DataRelation(models.Model):
         return self.user_id
 
 
-class TaskExecuteQueen(models.Model):
+class TaskList(models.Model):
     task_id = models.AutoField(verbose_name='任务编号', primary_key=True)
     task_name = models.CharField(verbose_name='任务名称', max_length=200)
     user_id = models.ForeignKey(UserInfo, verbose_name='任务发起人id', on_delete=models.DO_NOTHING)

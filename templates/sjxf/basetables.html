@@ -62,7 +62,7 @@
                                 <th>序号</th>
                                 <th>模式名</th>
                                 <th>表名</th>
-                                <th>渠道名称</th>
+                                <th>渠道名</th>
                                 <th>表中文名</th>
                                 <th>创建时间</th>
                             </tr>
@@ -84,7 +84,7 @@
                                 <th>序号</th>
                                 <th>模式名</th>
                                 <th>表名</th>
-                                <th>渠道名称</th>
+                                <th>渠道名</th>
                                 <th>表中文名</th>
                                 <th>创建时间</th>
                             </tr>
@@ -115,6 +115,19 @@
                 pageLength: 25,
                 responsive: true,
                 dom: '<"html5buttons"B>lTfgitp',
+                language: {
+                    lengthMenu: "选择每页 _MENU_ 展示 ",
+                    zeroRecords: "未找到匹配结果",
+                    info: "当前显示第 _PAGE_ 页结果，共 _PAGES_ 页",
+                    infoEmpty: "没有数据",
+                    infoFiltered: "(获取 _MAX_ 项结果)",
+                    paginate: {
+                        first: "首页",
+                        previous: "上一页",
+                        next: "下一页",
+                        last: "末页"
+                    },
+                },
                 buttons: [
                     {extend: 'copy'},
                     {extend: 'csv'},
