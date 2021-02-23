@@ -26,62 +26,50 @@
 
 {% block content %}
     <div class="wrapper wrapper-content animated fadeIn">
-        <div class="ibox-content">
-            <div class="row col-lg-12 form-group" style="margin-top: 20px">
-                <div class="col-lg-6" style="padding-right: 0">
-                    <div class="ibox">
-                        <!-- title -->
-                        <div class="ibox-title">
-                            <h5>选择要下发的机构</h5>
-                        </div>
-                        <!-- form : 农商银行选择 -->
-                        <div class="ibox-content">
-                            <p></p>
-                            <form id="user-form" action="#" class="wizard-big">
-                                {% csrf_token %}
-                                <select class="form-control dual_select" multiple id="DataUsers">
-                                    {% for data_user in data_users %}
-                                        <option value="{{ data_user.user_id }}">
-                                            {{ data_user.user_id }} | {{ data_user.org_name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </form>
-                        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>选择要下发的机构和数据表</h5>
                     </div>
-                </div>
-                <div class="col-lg-6" style="padding-left: 0">
-                    <div class="ibox">
-                        <!-- title -->
-                        <div class="ibox-title">
-                            <h5>选择要下发的表</h5>
-                        </div>
-                        <!-- form : 数据表选择  -->
-                        <div class="ibox-content">
-                            <p></p>
-                            <form id="table-form" action="#" class="wizard-big">
-                                {% csrf_token %}
-                                <select class="form-control dual_select" multiple id="Tables">
-                                    {% for table in tables %}
-                                        <option value="{{ table.id }}">
-                                            {{ table.ds_id }}.{{ table.table_name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </form>
-                        </div>
+                    <div class="ibox-content">
+                        <form action="{% url 'manual_sjxf' %}" class="wizard-big" method="post"
+                              enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row col-sm-12">
+                                <div class="col-sm-6">
+                                    <select class="form-control dual_select" multiple name="org_no">
+                                        {% for data_user in data_users %}
+                                            <option value="{{ data_user.user_id }}">
+                                                {{ data_user.user_id }} | {{ data_user.org_name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control dual_select" multiple name="table_id">
+                                        {% for table in tables %}
+                                            <option value="{{ table.id }}">
+                                                {{ table.ds_id }}.{{ table.table_name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="row form-group col-sm-12">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white btn-lg" type="submit" style="margin-right: 40px"
+                                            name="cancel">
+                                        取消
+                                    </button>
+                                    <button class="btn btn-primary btn-lg" type="submit" id="submit" name="submit">
+                                        提交
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </div>
-            </div>
-            <div class="hr-line-dashed"></div>
-            <div class="row form-group col-sm-12">
-                <div class="col-sm-4 col-sm-offset-2">
-                    <button class="btn btn-white btn-lg" type="submit" style="margin-right: 40px">
-                        取消
-                    </button>
-                    <button class="btn btn-primary btn-lg" type="submit" id="submit">
-                        提交
-                    </button>
                 </div>
             </div>
         </div>
@@ -138,54 +126,33 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
-        });
 
-        $(document).ready(function(){
             $('.tagsinput').tagsinput({
                 tagClass: 'label label-primary'
             });
+
             $('.dual_select').bootstrapDualListbox({
-                selectorMinimalHeight: 160
+                selectorMinimalHeight: 200,
             });
+            <!-- 提交按钮默认不可提交 -->
+            $("button[name='submit']").attr("disabled", true);
         });
-
-        $(function () {
-            $('#submit').click(function () {
-                <!-- 必须同时选择机构和数据表，任一为空告警 -->
-                const select_users =
-                    $('#user-form > div > div.box2.col-md-6 > select > option:nth-child(1)').val();
-                const select_tables =
-                    $('#table-form > div > div.box2.col-md-6 > select > option:nth-child(1)').val();
-                if (select_users === undefined || select_tables === undefined) alert("未选择机构或数据表！");
-                <!-- 外层循环 ：机构 -->
-                <!-- 内层循环 ：数据表 -->
-                let count = 0;
-                $('#DataUsers').find('option:selected').each(function () {
-                    const user = $(this).val()
-                    $('#Tables').find('option:selected').each(function () {
-                        count = count + 1;
-                        const table_id = $(this).val()
-                        $.ajax({
-                            url: '',
-                            type: 'post',
-                            data: {
-                                csrfmiddlewaretoken: '{{ csrf_token }}',
-                                'org_no': user,
-                                'table_id': table_id,
-                            },
-                            success: function (data) {
-                                console.log(data)
-                                console.log("提交成功")
-                            }
-                        })
-                    })
-                });
-                <!-- 完成提交后刷新页面 -->
-                alert("您本次提交了" + count + "个下发任务，后台将陆续进行处理，请耐心等待。")
-                window.location.reload();
-            });
+        <!-- 点击取消按钮清空select选中的值 -->
+        $("button[name='cancel']").click(function () {
+            $("select[name='org_no_helper2']").empty();
+            $("select[name='org_no']").find('option:selected').remove()
+            $("select[name='table_id_helper2']").empty();
+            $("select[name='table_id']").find('option:selected').remove()
+            return false;
         });
-
+        <!-- 机构和数据表同时选中值才可以点击 -->
+        $("select[name='org_no'], select[name='table_id']").change(function() {
+            const org_no_select = $("select[name='org_no']").val()
+            const table_id_select = $("select[name='table_id']").val()
+            if (org_no_select.length !== 0 & table_id_select.length !== 0)
+                $("button[name='submit']").attr("disabled", false);
+            else $("button[name='submit']").attr("disabled", true);
+        })
     </script>
 
 {% endblock %}

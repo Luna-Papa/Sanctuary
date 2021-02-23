@@ -1,9 +1,11 @@
 from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
 from django.views.generic import View
-from sjxf.models import DataSub, DataUsers, BaseTables, TaskExecuteQueen, DataRelation
+from sjxf.models import DataSub, DataUsers, BaseTables, DataRelation, TaskList
+from users.models import UserInfo
 from sjxf.tasks import data_push
 import json
+import uuid
 
 
 # Create your views here.
@@ -30,19 +32,38 @@ class ManualSjxf(View):
         return render(request, 'sjxf/manualSJXF.html', context=context)
 
     def post(self, request):
-        org_no = request.POST.get('org_no')
-        table_id = request.POST.get('table_id')
-        # 取出后台全量数据下发任务所需参数值
-        #     1 渠道名称：  DS_ID
-        #     2 机构  号：  DUSER_ID
-        #     3 数据表名：  TBNAME
-        #     4 数据表ID:   T_ID
-        queryset = BaseTables.objects.get(id=table_id)
-        ds_id = queryset.ds_id
-        tb_name = queryset.table_name
-        # 调用celery异步任务
-        data_push.delay(ds_id, org_no, tb_name, table_id)
-        return HttpResponse('add task success.')
+        all_tasks = []
+        username = request.user.username if request.user.username else 'admin'
+        userinfo = UserInfo.objects.filter(username=username)
+        if userinfo.exists():
+            real_name = UserInfo.objects.get(username=username).real_name
+        else:
+            real_name = '手工下发'
+        for user in request.POST.getlist('org_no'):
+            for table in request.POST.getlist('table_id'):
+                task_no = uuid.uuid4()
+                # 取出后台全量数据下发任务所需参数值
+                #     1 渠道名称：  DS_ID
+                #     2 机构  号：  DUSER_ID
+                #     3 数据表名：  TBNAME
+                #     4 数据表ID:   T_ID
+                queryset = BaseTables.objects.get(id=table)
+                ds_id = queryset.ds_id
+                tb_name = queryset.table_name
+                # 检验数据表与下发机构是否匹配
+                result = DataSub.objects.filter(user_id=user, t_id=table)
+                remarks = ''
+                v_flag = True
+                if not result.exists():
+                    remarks = f'该行未配置下发表{tb_name}'
+                    v_flag = False
+                task = TaskList(task_id=task_no, user_id=username, user_name=real_name,
+                                org_no=user, table_name=tb_name, v_flag=v_flag, remarks=remarks)
+                task.save()
+                # 调用celery异步任务
+                data_push.delay(ds_id, user, tb_name, table)
+                all_tasks.append(TaskList.objects.get(task_id=task_no))
+        return render(request, 'sjxf/tasklist.html', {'all_tasks': all_tasks, 'sjxf_nav_active': True})
 
 
 class DataRelationView(View):
@@ -59,11 +80,11 @@ def ajax_data_relations(request):
             relations = DataRelation.objects.filter(user_id=org_no)  # 按机构号精准匹配
         elif table_name:
             if len(table_name.strip()) >= 4:
-                relations = DataRelation.objects.filter(table_name__icontains=table_name)
+                relations = DataRelation.objects.filter(table_name__icontains=table_name)  # 按表名模糊匹配
             else:
                 relations = []
         else:
-            relations = DataRelation.objects.all()[:200]
+            relations = DataRelation.objects.all()[:200]  # 默认返回数据表前200条记录进行展示
         for relation_info in relations:
             relation_list.append({
                 'user_id': relation_info.user_id,
@@ -71,6 +92,7 @@ def ajax_data_relations(request):
                 'ds_id': relation_info.ds_id,
                 'table_name': relation_info.table_name,
                 'c_user_id': relation_info.c_user_id,
+                # 前端ajax请求datetime格式数据需要转换
                 'create_date': relation_info.create_date.strftime('%Y-%m-%d %H:%M:%S'),
             })
         return HttpResponse(json.dumps(relation_list), content_type="application/json")

@@ -22,25 +22,23 @@ class RoleInfo(models.Model):
 
 
 class UserInfo(AbstractUser):
-    user_id = models.CharField(max_length=20, verbose_name='用户编号', primary_key=True)
-    org_id = models.CharField(max_length=20, verbose_name='所属机构编号')
-    username = models.CharField(max_length=100, verbose_name='用户名', unique=True)
+    org_id = models.CharField(max_length=20, verbose_name='所属机构编号', null=True)
     real_name = models.CharField(max_length=50, verbose_name='真实姓名', null=True)
     position = models.CharField(max_length=50, verbose_name='职位', null=True)
-    phone = models.CharField(max_length=20, verbose_name='联系方式')
+    phone = models.CharField(max_length=20, verbose_name='联系方式', null=True)
     email = models.EmailField(max_length=100, verbose_name='邮箱', blank=True)
 
     class Meta:
         verbose_name = '用户管理'
         verbose_name_plural = verbose_name
-        ordering = ['user_id']
+        ordering = ['username']
 
     def __str__(self):
         return self.username
 
 
 class UserRole(models.Model):
-    user_id = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    username = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     role_id = models.ForeignKey(RoleInfo, on_delete=models.CASCADE)
     status = models.BooleanField(verbose_name='有效标识')
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
@@ -49,11 +47,11 @@ class UserRole(models.Model):
     class Meta:
         verbose_name = '用户权限管理'
         verbose_name_plural = verbose_name
-        ordering = ['user_id']
-        unique_together = ['user_id', 'role_id']
+        ordering = ['username']
+        unique_together = ['username', 'role_id']
 
     def __str__(self):
-        return self.user_id
+        return self.username
 
 
 class MenuInfo(models.Model):
@@ -102,3 +100,17 @@ class RoleMenu(models.Model):
 
     def __str__(self):
         return self.menu_id
+
+
+class Slogan(models.Model):
+    text = models.CharField(verbose_name='标语', max_length=200, unique=True)
+    v_flag = models.BooleanField(verbose_name='有效标识')
+    created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated_time = models.DateTimeField(auto_now=True, verbose_name='上次修改时间')
+
+    class Meta:
+        verbose_name = '标语管理'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.text

@@ -18,9 +18,9 @@ from django.urls import path, include
 from apps.users.views import index, user_login
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', index, name='index'),
-    path('login/', user_login, name='login'),
+    path('admin/', admin.site.urls),  # 管理后台
+    path('', index, name='index'),  # 用户首页
+    path('login/', user_login, name='login'),  # 用户登录
     path('sjxf/', include('sjxf.urls')),  # 【数据下发】应用
     path('dataexp/', include('dataexp.urls'))  # 【数据提取】应用
 ]

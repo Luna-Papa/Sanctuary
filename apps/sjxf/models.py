@@ -94,20 +94,21 @@ class DataRelation(models.Model):
 
 
 class TaskList(models.Model):
-    task_id = models.AutoField(verbose_name='任务编号', primary_key=True)
-    task_name = models.CharField(verbose_name='任务名称', max_length=200)
-    user_id = models.ForeignKey(UserInfo, verbose_name='任务发起人id', on_delete=models.DO_NOTHING)
-    user_name = models.CharField(verbose_name='任务发起人姓名', max_length=100)
-    org_id = models.CharField(max_length=20, verbose_name='所属机构编号')
-    create_date = models.DateTimeField(verbose_name='任务创建日期')
-    end_date = models.DateTimeField(verbose_name='任务结束日期', null=True)
-    status = models.CharField(verbose_name='执行状态', choices=StatusTypes.choices, max_length=1)
-    content = models.TextField(verbose_name='任务执行日志', null=True)
+    task_id = models.UUIDField(verbose_name='任务编号', primary_key=True)
+    user_id = models.CharField(max_length=20, verbose_name='提交人', default='admin')
+    user_name = models.CharField(verbose_name='提交人姓名', max_length=50, default='')
+    org_no = models.CharField(verbose_name='机构编号', max_length=10)
+    table_name = models.CharField(verbose_name='下发表名', max_length=100)
+    v_flag = models.BooleanField(verbose_name='有效标识')
+    remarks = models.CharField(verbose_name='备注', max_length=100, null=True, blank=True)
+    # status = models.CharField(verbose_name='执行状态', choices=StatusTypes.choices, max_length=1)
+    created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated_time = models.DateTimeField(auto_now=True, verbose_name='上次修改时间')
 
     class Meta:
-        verbose_name = '任务执行队列'
+        verbose_name = '任务清单'
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.task_name
+        return str(self.task_id)
 

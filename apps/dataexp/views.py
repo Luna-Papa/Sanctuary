@@ -19,7 +19,6 @@ def exp_register(request):
     elif request.method == "POST":
         register_type = request.POST.get("register_type")
         if register_type == 'manual':
-            print(request.POST.get("sys_name"))
             task_no = uuid.uuid4()
             sys_name = SystemInfo.objects.get(sys_name=request.POST.get("sys_name"))
             user_name = request.user.username if request.user.username else 'admin'
@@ -51,7 +50,8 @@ def exp_register(request):
                     task_no = uuid.uuid4()
                     with transaction.atomic():
                         user_name = request.user.username if request.user.username else 'admin'
-                        real_name = UserInfo.objects.get(username=user_name)
+                        real_name = UserInfo.objects.get(username=user_name).real_name \
+                            if UserInfo.objects.get(username=user_name).real_name else 'admin'
                         for i in range(1, rows):
                             i_row = table.row_values(i)
                             # 处理入表ExpTaskList所需字段
