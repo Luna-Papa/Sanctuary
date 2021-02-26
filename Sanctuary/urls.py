@@ -15,12 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from apps.users.views import index, user_login
+from apps.users.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # 管理后台
     path('', index, name='index'),  # 用户首页
-    path('login/', user_login, name='login'),  # 用户登录
+    path('users/', include('users.urls')),  # 【用户管理】应用
     path('sjxf/', include('sjxf.urls')),  # 【数据下发】应用
     path('dataexp/', include('dataexp.urls'))  # 【数据提取】应用
 ]

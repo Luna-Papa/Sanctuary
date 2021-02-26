@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>{% block title %}
-       万事屋 -
+       运维驾驶舱 -
     {% endblock %}</title>
 
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -17,9 +17,9 @@
     {% block custom_css %}
     {% endblock %}
 
+    <link href="{% static 'css/plugins/textSpinners/spinners.css' %}" rel="stylesheet">
     <link href="{% static 'css/animate.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
-
 </head>
 
 <body>
@@ -38,9 +38,9 @@
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a class="dropdown-item" href="#">个人信息</a></li>
-                                <li><a class="dropdown-item" href="#">修改密码</a></li>
+                                <li><a class="dropdown-item" data-toggle="modal" href="#modal-form">修改密码</a></li>
                                 <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">退出登录</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:logout' %}">退出登录</a></li>
                             </ul>
                         </div>
                         <div class="logo-element">
@@ -54,15 +54,11 @@
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="{% url 'get_base_table' %}">已下发数据表</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'get_data_relation' %}">数据下发关系</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'manual_sjxf' %}">全量数据下发</a>
-                            </li>
+                            <li><a href="{% url 'sjxf:base_table' %}">已下发数据表</a></li>
+                            <li><a href="{% url 'sjxf:data_relation' %}">数据下发关系</a></li>
+                            <li><a href="{% url 'sjxf:manual_sjxf' %}">全量数据下发</a></li>
+                            <li><a href="#">历史数据下发</a></li>
+                            <li><a href="{% url 'sjxf:task_list' %}">下发任务查询</a></li>
                         </ul>
                     </li>
                     <li class="{% if data_query_nav_active %}active{% endif %}">
@@ -83,8 +79,8 @@
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="{% url 'exp_register' %}">数据需求登记</a></li>
-                            <li><a href="#">提取进度查询</a></li>
+                            <li><a href="{% url 'DataExp:exp_register' %}">数据需求登记</a></li>
+                            <li><a href="{% url 'DataExp:task_list' %}">提取任务查询</a></li>
                         </ul>
                     </li>
                     <li>
@@ -154,7 +150,7 @@
                         </li>
 
                         <li>
-                            <a href="#">
+                            <a href="{% url 'users:logout' %}">
                                 <i class="fa fa-sign-out"></i> 登出
                             </a>
                         </li>
@@ -174,7 +170,50 @@
             <!-- 主页正文 -->
             {% block content %}
             {% endblock %}
+            <!-- 密码修改弹出框 -->
+            <div id="modal-form" class="modal fade" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h3 class="m-t-none m-b">密码修改</h3>
+                                    <p></p>
+                                    <form role="form" method="post" action="{% url 'users:chg_pwd' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label>原密码</label>
+                                            <input type="password" class="form-control" name="password" required>
+                                        </div>
+                                        <div id="pwd-container1" class="form-group">
+                                            <div class="form-group" >
+                                                <label>新密码</label>
+                                                <input type="password" class="form-control" name="password1"
+                                                    id="password1" value="Passwo" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="pwstrength_viewport_progress"></div>
+                                            </div>
+                                        </div>
 
+                                        <div class="form-group">
+                                            <label>确认新密码</label>
+                                            <input type="password" class="form-control" name="password2" required>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-lg btn-primary float-right m-t-n-xs"
+                                                    type="submit" name="chg_pwd" >
+                                                <strong>确认</strong>
+                                            </button>
+                                        </div>
+                                        <p style="color: red" id="chg_pwd_msg"></p>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- 页脚-->
             <div class="footer">
 {#                <div class="float-right">#}
@@ -249,15 +288,24 @@
         </div>
         <div class="toast-body">
             {% block alert %}
-                欢迎来到 <strong>万事屋</strong> ---
+                欢迎来到 <strong>运维驾驶舱</strong> ---
             {% endblock %}
         </div>
     </div>
 
     <!-- Mainly scripts -->
-    <script src="/static/js/jquery-3.1.1.min.js"></script>
-    <script src="/static/js/popper.min.js"></script>
-    <script src="/static/js/bootstrap.js"></script>
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- Custom and plugin javascript -->
+    <script src="{% static 'js/inspinia.js' %}"></script>
+    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+    <!-- Password meter -->
+    <script src="{% static 'js/plugins/pwstrength/i18next.js' %}"></script>
+    <script src="{% static 'js/plugins/pwstrength/pwstrength.js' %}"></script>
+    <script src="{% static 'js/plugins/pwstrength/zxcvbn.js' %}"></script>
 
     {% block custom_js %}
         <!-- lead into require js -->
@@ -267,5 +315,111 @@
         <!-- add js in html -->
     {% endblock %}
 
+    <script>
+        $(document).ready(function (){
+            "use strict";
+            <!-- 新密码复杂度校验插件设置 -->
+            i18next.init({
+                lng: 'es',
+                resources: {
+                    es: {
+                        translation: {
+                            "wordMinLength": "您的密码太短",
+                            "wordMaxLength": "您的密码太长",
+                            "wordInvalidChar": "您的密码包含无效字符",
+                            "wordNotEmail": "不要使用电子邮件作為密码",
+                            "wordSimilarToUsername": "您的密码不能包含您的用戶名",
+                            "wordTwoCharacterClasses": "使用不同的组合类型 例如: 大小写混合",
+                            "wordRepetitions": "太多的重复。例如:1111",
+                            "wordSequences": "你的密码包含连续英文/数字 例如:123 or abc",
+                            "errorList": "错误：",
+                            "veryWeak": "非常弱",
+                            "weak": "弱",
+                            "normal": "普通",
+                            "medium": "中等",
+                            "strong": "強",
+                            "veryStrong": "非常強"
+                        }
+                    }
+                }
+            }, function () {
+                const options1 = {};
+                options1.ui = {
+                    container: "#pwd-container1",
+                    showVerdictsInsideProgressBar: true,
+                    viewports: {
+                        progress: ".pwstrength_viewport_progress"
+                    },
+                    showErrors: true,
+                    {#showPopover: true,#}
+                };
+                options1.common = {
+                    debug: false,
+                };
+                options1.rules = {
+                    activated: {
+                        wordTwoCharacterClasses: true,
+                        wordRepetitions: true,
+                        wordSequences: true,
+                        wordMinLength: 6,
+                        wordInvalidChar: true,
+                    }
+                };
+                $('#password1').pwstrength(options1);
+            });
+
+
+
+
+            $("button[name='chg_pwd']").attr("disabled", true);
+            const password = $("input[name='password']");
+            let chk_old_pwd = false;
+            let chk_new_pwd = false;
+            <!-- 校验原密码是否正确 -->
+            password.blur(function (){
+                const old_pwd = password.val()
+                if (old_pwd !== '') {
+                    $.ajax({
+                        url: '{% url 'users:chk_pwd' %}',
+                        type: 'post',
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            password: old_pwd,
+                        },
+                        success: function (data) {
+                            if (data !== 'ok') {
+                                $('#chg_pwd_msg').text(data);
+                                chk_old_pwd = false
+                                $("button[name='chg_pwd']").attr("disabled", true);
+                            }
+                            else {
+                                $('#chg_pwd_msg').text('');
+                                chk_old_pwd = true
+                                if (chk_new_pwd) $("button[name='chg_pwd']").attr("disabled", false);
+                                else $("button[name='chg_pwd']").attr("disabled", true);
+                            }
+                        }
+                    })
+                }
+            });
+            const password1 = $("input[name='password1']")
+            const password2 = $("input[name='password2']")
+            password2.bind('input propertychange', function() {
+                if (password1.val() === password2.val()) {
+                    $(this).css("border-color", "blue")
+                    password1.css("border-color", "blue")
+                    chk_new_pwd = true
+                    if (chk_old_pwd) $("button[name='chg_pwd']").attr("disabled", false);
+                    else $("button[name='chg_pwd']").attr("disabled", true);
+                }
+                else {
+                    $(this).css("border-color", "red");
+                    chk_new_pwd = false;
+                    $("button[name='chg_pwd']").attr("disabled", true)
+                }
+            })
+        })
+
+    </script>
 </body>
 </html>

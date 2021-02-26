@@ -53,7 +53,7 @@
                         <h3></h3>
                         <p></p>
                         <form class="m-t-md" enctype="multipart/form-data"
-                              action="{% url 'exp_register' %}" method="post">
+                              action="{% url 'DataExp:exp_register' %}" method="post">
                             {% csrf_token %}
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">选择登记方式</label>
@@ -68,7 +68,7 @@
                                 <div class="col-sm-4">
                                     <button class="btn btn-info btn-lg" type="submit"
                                             style="margin-left: 10px">
-                                        <a href="{% url 'download_template' %}" style="color: white">模板下载</a>
+                                        <a href="{% url 'DataExp:download_template' %}" style="color: white">模板下载</a>
                                     </button>
                                 </div>
                             </div>

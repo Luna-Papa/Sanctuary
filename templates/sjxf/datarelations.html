@@ -37,7 +37,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row col-sm-12">
-                        <input type="text" class="form-control input-sm m-b-xs col-sm-2"
+                        <input type="text" class="form-control input-sm m-b-xs col-sm-2" style="margin-left: 15px"
                                name="filter_organ_no" placeholder="按机构号搜索" value="" autocomplete="off">
                         <input type="text" class="form-control input-sm m-b-xs col-sm-2"
                                name="filter_table_name" placeholder="按表名搜索" value="" autocomplete="off"
@@ -159,7 +159,7 @@
                     },
                 ],
                 ajax: {
-                    url: '{% url 'filter_data_relation' %}',
+                    url: '{% url 'sjxf:filter_data_relation' %}',
                     data: {
                         'org_no': org_no,
                         'table_name': table_name,

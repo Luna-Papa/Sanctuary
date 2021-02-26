@@ -33,7 +33,7 @@
                         <h5>选择要下发的机构和数据表</h5>
                     </div>
                     <div class="ibox-content">
-                        <form action="{% url 'manual_sjxf' %}" class="wizard-big" method="post"
+                        <form action="{% url 'sjxf:manual_sjxf' %}" class="wizard-big" method="post"
                               enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="row col-sm-12">

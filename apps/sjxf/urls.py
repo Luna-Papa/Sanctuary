@@ -1,10 +1,12 @@
 from django.urls import path
-from apps.sjxf.views import BaseTablesView, ManualSjxf, DataRelationView, ajax_data_relations
+from apps.sjxf.views import BaseTablesView, ManualSjxf, ajax_data_relations, TaskListView, DataRelationView
 
 
+app_name = 'sjxf'
 urlpatterns = [
-    path('basetables/', BaseTablesView.as_view(), name='get_base_table'),
-    path('manual-sjxf/', ManualSjxf.as_view(), name='manual_sjxf'),
-    path('datasubs/', DataRelationView.as_view(), name='get_data_relation'),
-    path('get_data_relations/', ajax_data_relations, name='filter_data_relation'),
+    path('basetables/', BaseTablesView.as_view(), name='base_table'),  # 展示已下发基础表
+    path('datarelations/', DataRelationView.as_view(), name='data_relation'),  # 展示下发关系 - 农商银行与数据表 【网页初始化】
+    path('manual-sjxf/', ManualSjxf.as_view(), name='manual_sjxf'),  # 手工全量数据下发
+    path('get_data_relations/', ajax_data_relations, name='filter_data_relation'),  # 展示下发关系 - 农商银行与数据表 【实际数据请求-ajax】
+    path('task_list/', TaskListView.as_view(), name='task_list'),  # 展示用户已创建的数据下发任务
 ]

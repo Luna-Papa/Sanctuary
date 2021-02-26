@@ -96,3 +96,10 @@ def ajax_data_relations(request):
                 'create_date': relation_info.create_date.strftime('%Y-%m-%d %H:%M:%S'),
             })
         return HttpResponse(json.dumps(relation_list), content_type="application/json")
+
+
+class TaskListView(View):
+    def get(self, request):
+        username = request.user.username
+        all_tasks = TaskList.objects.filter(user_id=username)
+        return render(request, 'sjxf/tasklist.html', {'all_tasks': all_tasks, 'sjxf_nav_active': True})

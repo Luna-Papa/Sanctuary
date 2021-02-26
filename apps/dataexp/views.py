@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.generic import View
 from django.db import transaction
 from dataexp.models import SystemInfo, ExpTaskList
 from users.models import UserInfo
@@ -38,7 +39,7 @@ def exp_register(request):
                                    separator=separator, work_date=work_date)
                 task.save()
             all_tasks = ExpTaskList.objects.filter(task_no=task_no).values()
-            return render(request, "dataexp/tasklist.html", {'all_tasks': all_tasks})
+            return render(request, "dataexp/tasklist.html", {'all_tasks': all_tasks, 'data_exp_nav_active': True})
         elif register_type == 'upload':
             f = request.FILES.get('file')
             excel_type = f.name.split('.')[1]
@@ -69,7 +70,7 @@ def exp_register(request):
                                                separator=separator, work_date=work_date)
                             task.save()
                     all_tasks = ExpTaskList.objects.filter(task_no=task_no).values()
-                    return render(request, "dataexp/tasklist.html", {'all_tasks': all_tasks})
+                    return render(request, "dataexp/tasklist.html", {'all_tasks': all_tasks, 'data_exp_nav_active': True})
                 except Exception as e:
                     print(e)
 
@@ -81,3 +82,10 @@ def download_template(request):
         response['Content-Type'] = 'application/octet-stream'
         response['Content-Disposition'] = 'attachment;filename="填写模板.xlsx"'
         return response
+
+
+class TaskListView(View):
+    def get(self, request):
+        username = request.user.username
+        all_tasks = ExpTaskList.objects.filter(user_id=username)
+        return render(request, 'dataexp/tasklist.html', {'all_tasks': all_tasks, 'data_exp_nav_active': True})

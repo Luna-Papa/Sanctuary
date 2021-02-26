@@ -42,7 +42,7 @@ form{
     width: 100px;
 }
 form h2{
-    font-size: 2.2rem;
+    font-size: 1.4rem;
     text-transform: uppercase;
     margin: 15px 0;
     color: #999;
@@ -167,5 +167,4 @@ a:hover{
 .error{
     color: red;
     font-size: 18px;
-    font-family: 'Roboto', sans-serif;
 }

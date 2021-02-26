@@ -24,6 +24,7 @@ class RoleInfo(models.Model):
 class UserInfo(AbstractUser):
     org_id = models.CharField(max_length=20, verbose_name='所属机构编号', null=True)
     real_name = models.CharField(max_length=50, verbose_name='真实姓名', null=True)
+    department = models.CharField(max_length=100, verbose_name='部门', null=True)
     position = models.CharField(max_length=50, verbose_name='职位', null=True)
     phone = models.CharField(max_length=20, verbose_name='联系方式', null=True)
     email = models.EmailField(max_length=100, verbose_name='邮箱', blank=True)
@@ -114,3 +115,15 @@ class Slogan(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Organization(models.Model):
+    org_id = models.CharField(max_length=20, verbose_name='机构编号', primary_key=True)
+    org_name = models.CharField(max_length=100, verbose_name='机构名称')
+
+    def __str__(self):
+        return self.org_id
+
+    class Meta:
+        verbose_name = '机构信息'
+        verbose_name_plural = verbose_name

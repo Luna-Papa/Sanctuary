@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/css/login.css" rel="stylesheet">
-    <title>万事屋 - 登录</title>
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/login.css' %}" rel="stylesheet">
+    <title>运维驾驶舱 - 登录</title>
 </head>
 <body>
 <img src="/static/images/bg.png" alt="" class="wave">
@@ -15,17 +16,17 @@
         <img src="/static/images/img-3.svg" alt="">
     </div>
     <div class="login-box">
-        <form action="{% url 'login' %}" method="post">
+        <form action="{% url 'users:login' %}" method="post">
             {% csrf_token %}
-            <img src="/static/images/logo.svg" alt="" class="avatar">
-            <h2>欢迎访问万事屋</h2>
+            <img src="/static/images/logo.svg" alt="" class="avatar" style="width: 60px; height: 60px">
+            <h2>欢迎来到运维驾驶舱</h2>
             <div class="input-group">
                 <div class="icon">
                     <i class="fa fa-user"></i>
                 </div>
                 <div>
                     <h5>用户名</h5>
-                    <input type="text" class="input" required name="username">
+                    <input type="text" class="input" required name="username" autocomplete="off">
                 </div>
             </div>
             <div class="input-group">
@@ -34,7 +35,7 @@
                 </div>
                 <div>
                     <h5>密码</h5>
-                    <input type="password" class="input" required name="password">
+                    <input type="password" class="input" required name="password" autocomplete="off">
                 </div>
             </div>
 
