@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from users.models import UserInfo
+from rbac.server.init_permission import init_permission
 # Create your views here.
 
 
@@ -24,7 +25,8 @@ def user_login(request):
             if user.is_active:
                 # 登录
                 login(request, user)
-                return redirect('sjxf:base_table')
+                init_permission(request, user)
+                return HttpResponseRedirect(reverse('sjxf:base_table'))
             else:
                 return render(request, 'users/login.html', {'msg': '密码输入错误'})
         else:

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_results',
     'django_celery_beat',
+    'rbac',  # 权限管理
     'users',  # 用户管理
     'sjxf',  # 数据下发
     'dataquery',  # 数据查询
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rbac.middleware.rbac.RbacMiddleware',  # 注册RBAC权限管理中间件
 ]
 
 ROOT_URLCONF = 'Sanctuary.urls'
@@ -153,3 +155,16 @@ timezone = TIME_ZONE
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # Broker配置，使用Redis作为消息中间件
 CELERY_RESULT_SERIALIZER = 'json'  # 结果序列化方案
+
+# 保存权限菜单
+PERMISSION_URL_KEY = 'url_key'
+PERMISSION_MENU_KEY = 'menu_key'
+
+# 配置URL权限白名单
+SAFE_URL = [
+    '/users/login/',
+    '/users/logout/',
+    '/admin/.*',
+]
+# 配置登录页面
+LOGIN_URL = '/users/login/'
