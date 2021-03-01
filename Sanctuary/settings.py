@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'sjxf',  # 数据下发
     'dataquery',  # 数据查询
     'dataexp',  # 测试数据提取
+    'infomg',  # 内部信息管理
 ]
 
 MIDDLEWARE = [
