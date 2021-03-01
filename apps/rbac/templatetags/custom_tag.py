@@ -22,7 +22,7 @@ def get_structure_data(request):
             if not item["pid_id"]:
                 menu_dict[item["id"]]["active"] = True
             else:
-                menu_dict[item["id"]]["active"] = True
+                menu_dict[item["pid_id"]]["active"] = True
 
     menu_result = {}
     for item in menu_dict.values():

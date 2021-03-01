@@ -1,11 +1,14 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.views.generic import View
 from django.db import transaction
 from dataexp.models import SystemInfo, ExpTaskList
 from users.models import UserInfo
+from django.utils.http import urlquote
 import xlrd
 import uuid
+
+
 # Create your views here.
 
 
@@ -31,7 +34,7 @@ def exp_register(request):
             separator = request.POST.get("separator")
             work_date = request.POST.get("work_date")
             table_counts = int(request.POST.get("table_counts"))
-            for i in range(1, table_counts+1):
+            for i in range(1, table_counts + 1):
                 table_name = request.POST.get(f"table_{i}")
                 task = ExpTaskList(task_no=task_no, user_id=user_name, username=real_name,
                                    sys_name=sys_name, table_name=table_name, file_type=file_type,
@@ -70,18 +73,20 @@ def exp_register(request):
                                                separator=separator, work_date=work_date)
                             task.save()
                     all_tasks = ExpTaskList.objects.filter(task_no=task_no).values()
-                    return render(request, "dataexp/tasklist.html", {'all_tasks': all_tasks, 'data_exp_nav_active': True})
+                    return render(request, "dataexp/tasklist.html",
+                                  {'all_tasks': all_tasks, 'data_exp_nav_active': True})
                 except Exception as e:
                     print(e)
 
 
 def download_template(request):
     """下载文件上传模板"""
-    with open('static/files/template_dataexp.xlsx', 'rb') as f:
-        response = HttpResponse(f)
-        response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = 'attachment;filename="填写模板.xlsx"'
-        return response
+    file = open('static/files/template_dataexp.xlsx', 'rb')
+    response = FileResponse(file)
+    response['Content-Type'] = 'application/octet-stream'
+    filename_chinese = "填写模板"
+    response['Content-Disposition'] = 'attachment;filename="%s.xlsx"' % (urlquote(filename_chinese))
+    return response
 
 
 class TaskListView(View):

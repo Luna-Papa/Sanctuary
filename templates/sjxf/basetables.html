@@ -34,7 +34,6 @@
             <div class="ibox ">
                 <div class="ibox-title">
                     <h5>已下发基础表</h5>
-
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
@@ -84,7 +83,7 @@
     <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
     <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
     <script src="{% static 'js/plugins/dataTables/datatables.min.js' %}"></script>
-    <script src="{% static 'js/plugins/dataTables/dataTables.bootstrap4.min.js' %}"></script>
+{#    <script src="{% static 'js/plugins/dataTables/dataTables.bootstrap4.min.js' %}"></script>#}
 
     <script src="{% static 'js/inspinia.js' %}"></script>
     <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
@@ -92,7 +91,8 @@
 
 {% block custom_page_js %}
     <script>
-        {#$.fn.dataTable.Buttons.defaults.dom.button.className = 'btn btn-white btn-sm';#}
+        $.fn.dataTable.Buttons.defaults.dom.button.className = 'btn btn-white btn-sm';
+
         $(document).ready(function(){
             $('.dataTables-example').DataTable({
                 pageLength: 25,
@@ -116,16 +116,12 @@
                     {extend: 'csv'},
                     {extend: 'excel', title: 'ExampleFile'},
                     {extend: 'pdf', title: 'ExampleFile'},
-
-                    {extend: 'print',
-                     customize: function (win){
+                    {
+                        extend: 'print', customize: function (win) {
                             $(win.document.body).addClass('white-bg');
                             $(win.document.body).css('font-size', '10px');
-
-                            $(win.document.body).find('table')
-                                    .addClass('compact')
-                                    .css('font-size', 'inherit');
-                    }
+                            $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
+                        }
                     }
                 ]
             });

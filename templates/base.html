@@ -266,9 +266,6 @@
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
     <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
-    <!-- Custom and plugin javascript -->
-    <script src="{% static 'js/inspinia.js' %}"></script>
-    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
     <!-- Password meter -->
     <script src="{% static 'js/plugins/pwstrength/i18next.js' %}"></script>
     <script src="{% static 'js/plugins/pwstrength/pwstrength.js' %}"></script>
@@ -278,13 +275,17 @@
         <!-- lead into require js -->
     {% endblock %}
 
+    <!-- Custom and plugin javascript -->
+    <script src="{% static 'js/inspinia.js' %}"></script>
+    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+
     {% block custom_page_js %}
         <!-- add js in html -->
     {% endblock %}
 
     <script>
         $(document).ready(function (){
-            "use strict";
+            {#"use strict";#}
             <!-- 新密码复杂度校验插件设置 -->
             i18next.init({
                 lng: 'es',
@@ -318,7 +319,7 @@
                         progress: ".pwstrength_viewport_progress"
                     },
                     showErrors: true,
-                    {#showPopover: true,#}
+                    showPopover: true,
                 };
                 options1.common = {
                     debug: false,
@@ -334,9 +335,6 @@
                 };
                 $('#password1').pwstrength(options1);
             });
-
-
-
 
             $("button[name='chg_pwd']").attr("disabled", true);
             const password = $("input[name='password']");

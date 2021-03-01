@@ -52,6 +52,25 @@
                     <div class="ibox-content">
                         <h3></h3>
                         <p></p>
+{#                        <div class="form-group row">#}
+{#                                <label class="col-sm-2 col-form-label">选择登记方式</label>#}
+{#                                <div class="col-sm-6" aria-required="true">#}
+{#                                    <select class="select2_demo_1 form-control" id="register_type"#}
+{#                                            name="register_type">#}
+{#                                        <option></option>#}
+{#                                        <option value='manual'>手工填写</option>#}
+{#                                        <option value='upload'>文件上传</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                                <div class="col-sm-4">#}
+{#                                    <button class="btn btn-info btn-lg" type="submit"#}
+{#                                            id="download_template"#}
+{#                                            style="margin-left: 10px"#}
+{#                                            onclick="return false">#}
+{#                                        <a href="{% url 'DataExp:download_template' %}" style="color: white">模板下载</a>#}
+{#                                    </button>#}
+{#                                </div>#}
+{#                            </div>#}
                         <form class="m-t-md" enctype="multipart/form-data"
                               action="{% url 'DataExp:exp_register' %}" method="post">
                             {% csrf_token %}
@@ -65,11 +84,8 @@
                                         <option value='upload'>文件上传</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-4">
-                                    <button class="btn btn-info btn-lg" type="submit"
-                                            style="margin-left: 10px">
-                                        <a href="{% url 'DataExp:download_template' %}" style="color: white">模板下载</a>
-                                    </button>
+                                <div class="col-sm-1 btn btn-info btn-lg" style="margin-left: 10px">
+                                    <a href="{% url 'DataExp:download_template' %}" style="color: white">模板下载</a>
                                 </div>
                             </div>
                             <div class="hr-line-dashed toggle-show"></div>
@@ -268,7 +284,6 @@
                 theme: 'bootstrap4',
             });
         });
-
         <!-- 动态增加表单数据表输入行 -->
         function addTableInput() {
             const table_inputs = $('.table_name_input')
@@ -303,12 +318,11 @@
                 $("input[name='table_counts']").val(table_input_num-1);
             }
         }
-
+        <!-- 上传文件 -->
         $('.custom-file-input').on('change', function() {
             let fileName = $(this).val().split('\\').pop();
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
-
         <!-- 根据登记方式显示表单输入项 -->
         $('#register_type').change(function () {
             const register_type = $(this).children('option:selected').val()
@@ -321,7 +335,6 @@
                 $('.toggle-hide').hide()
             }
         });
-
     </script>
 
 {% endblock %}
