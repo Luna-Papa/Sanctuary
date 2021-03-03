@@ -43,6 +43,7 @@ def init_permission(request, user_obj):
                 'menu_icon': item['perm_group__menu__icon'],
             }
             permission_menu_list.append(tpl)
+        request.session[settings.PERMISSION_MENU_KEY] = permission_menu_list
 
     else:
         permission_item_list = user_obj.roles.values('permissions__id',
@@ -81,4 +82,4 @@ def init_permission(request, user_obj):
                 'menu_icon': item['permissions__perm_group__menu__icon'],
             }
             permission_menu_list.append(tpl)
-    request.session[settings.PERMISSION_MENU_KEY] = permission_menu_list
+        request.session[settings.PERMISSION_MENU_KEY] = permission_menu_list

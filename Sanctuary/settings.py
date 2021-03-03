@@ -166,7 +166,6 @@ SAFE_URL = [
     '/users/login/',
     '/users/logout/',
     '/admin/.*',
-    '/dataexp/download_template',
 ]
 # 配置登录页面
 LOGIN_URL = '/users/login/'

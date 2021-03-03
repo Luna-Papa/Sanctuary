@@ -5,14 +5,19 @@
             <span class="nav-label">{{ item.menu_title }}</span>
             <span class="fa arrow"></span>
         </a>
-        {% if item.children %}
-            <ul class="nav nav-second-level collapse">
-                {% for v in item.children  %}
-                    <li class="{% if v.active %}active{% endif %}">
+
+        <ul class="nav nav-second-level collapse">
+            {% for v in item.children  %}
+                {% if v.active %}
+                    <li class="active">
                         <a href="{{ v.url }}">{{ v.title }}</a>
                     </li>
-                {% endfor %}
-             </ul>
-        {% endif %}
+                {% else %}
+                    <li>
+                        <a href="{{ v.url }}">{{ v.title }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
     </li>
 {% endfor %}
