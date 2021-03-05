@@ -28,4 +28,5 @@ urlpatterns = [
     path('sjxf/', include('sjxf.urls')),  # 【数据下发】应用
     path('dataexp/', include('dataexp.urls')),  # 【数据提取】应用
     path('query/', include('dataquery.urls')),  # 【数据查询】应用
+    path('infomg/', include('infomg.urls')),  # 【信息管理】应用
 ]

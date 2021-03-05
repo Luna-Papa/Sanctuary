@@ -54,7 +54,7 @@ class Menu(models.Model):
     icon = models.CharField(max_length=32, verbose_name='图标', blank=True)
 
     class Meta:
-        verbose_name = '菜单名称'
+        verbose_name = '一级菜单'
         verbose_name_plural = verbose_name
 
     def __str__(self):
