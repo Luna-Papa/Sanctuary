@@ -57,3 +57,14 @@ def defect_list(request):
 
 def defect_detail(request):
     return render(request, 'infomg/defect_detail.html')
+
+
+def add_defect_detail(request, defect_id=None):
+    if request.method == 'GET':
+        if defect_id:
+            defects = ProductDefect.objects.get(pk=defect_id).values()
+            return render(request, 'infomg/add_defect_detail.html', {'defects': defects})
+        else:
+            defects = ProductDefect.objects.all().values()
+            periods = ProductDefect.objects.all().values('periods').distinct()
+            return render(request, 'infomg/add_defect_detail.html', {'defects': defects, 'periods': periods})
