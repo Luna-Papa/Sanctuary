@@ -45,7 +45,7 @@
                 <tr>
                     <th data-type="numeric" data-toggle="true">序号</th>
                     <th>产品类型</th>
-                    <th>设备型号/软件版本</th>
+                    <th width="100">设备型号/软件版本</th>
                     <th>生产厂商</th>
                     <th data-hide="all">缺陷原因</th>
                     <th>缺陷影响</th>
@@ -53,7 +53,7 @@
                     <th>补丁版本</th>
                     <th data-hide="all">解决状态</th>
                     <th data-hide="all">发现时间</th>
-                    <th>操作</th>
+                    <th width="100">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -69,8 +69,12 @@
                         <td>{{ defect.fix_pack }}</td>
                         <td>{{ defect.status }}</td>
                         <td>{{ defect.find_date }}</td>
-                        <td><a href="{% url '' %}"><i class="fa fa-list text-navy"></i></a></td>
-                        </tr>
+                        <td>
+                            <a href="{% url 'InfoMG:add_defect_detail' defect.id %}">
+                                <button class="btn btn-primary">添加记录</button>
+                            </a>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
                 <tfoot>

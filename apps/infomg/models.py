@@ -33,7 +33,7 @@ class ProductDefect(models.Model):
 
 class DefectDetail(models.Model):
     """缺陷明细记录表"""
-    periods = models.CharField(max_length=6, verbose_name='期数')
+    periods = models.CharField(max_length=7, verbose_name='期数')
     model = models.ForeignKey(ProductDefect, on_delete=models.CASCADE, verbose_name='设备型号/软件版本')
     system = models.CharField(verbose_name='涉及系统', max_length=10)
     solution = models.TextField(verbose_name='解决方案', null=True)
@@ -47,3 +47,6 @@ class DefectDetail(models.Model):
     class Meta:
         verbose_name = '缺陷明细记录表'
         verbose_name_plural = verbose_name
+        unique_together = (
+            'periods', 'model', 'system',
+        )
