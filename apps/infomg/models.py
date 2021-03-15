@@ -42,7 +42,7 @@ class DefectDetail(models.Model):
     solved_date = models.DateField(verbose_name='解决日期', null=True)
 
     def __str__(self):
-        return self.model
+        return self.system
 
     class Meta:
         verbose_name = '缺陷明细记录表'

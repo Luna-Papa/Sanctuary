@@ -8,10 +8,12 @@ import json
 from django.http import JsonResponse
 from django.urls import reverse
 
+
 # Create your views here.
 
 
 def defect_import(request):
+    """导出软硬件缺陷列表"""
     if request.method == 'GET':
         return render(request, 'infomg/defect_imp.html')
     elif request.method == 'POST':
@@ -51,8 +53,18 @@ def defect_import(request):
 
 
 def defect_list(request):
+    """展示软硬件缺陷列表"""
     if request.method == 'GET':
         all_defects = ProductDefect.objects.all().values()
+        for defect in all_defects:
+            details = DefectDetail.objects.filter(model=defect['id'])
+            all_details_count = details.count()  # 计算一条缺陷下创建待处理明细条数
+            solved_details_count = 0  # 待处理明细已处理数量
+            for detail in details:
+                if detail.status:
+                    solved_details_count += 1
+            defect['all_details_count'] = all_details_count
+            defect['solved_details_count'] = solved_details_count
         return render(request, 'infomg/defect_list.html', {'all_defects': all_defects})
 
 
@@ -112,4 +124,9 @@ def ajax_update_solved_date(request):
         detail_id = request.POST.get('detail_id')
         solved_date = request.POST.get('solved_date')
         DefectDetail.objects.filter(pk=detail_id).update(solved_date=solved_date, status=True)
+        # 如果一条缺陷对应的待处理明细都已经解决，则该缺陷应被修改为已完成。
+        defect_id = DefectDetail.objects.get(pk=detail_id).model_id
+        periods = DefectDetail.objects.get(pk=detail_id).periods
+        if not DefectDetail.objects.filter(model=defect_id, periods=periods, status=False):
+            ProductDefect.objects.filter(pk=defect_id).update(v_flag=True)
         return HttpResponse('success')

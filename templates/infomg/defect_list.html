@@ -45,15 +45,15 @@
                 <tr>
                     <th data-type="numeric" data-toggle="true">序号</th>
                     <th>产品类型</th>
-                    <th width="100">设备型号/软件版本</th>
-                    <th>生产厂商</th>
+                    <th>设备型号/软件版本</th>
+                    <th data-hide="all">生产厂商</th>
                     <th data-hide="all">缺陷原因</th>
                     <th>缺陷影响</th>
                     <th data-hide="all">解决方案</th>
                     <th>补丁版本</th>
                     <th data-hide="all">解决状态</th>
                     <th data-hide="all">发现时间</th>
-                    <th width="100">操作</th>
+                    <th>处理进度</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -61,7 +61,11 @@
                     <tr>
                         <td>{{ defect.number }}</td>
                         <td>{{ defect.category }}</td>
-                        <td>{{ defect.model }}</td>
+                        <td>
+                            <a href="{% url 'InfoMG:add_defect_detail' defect.id %}" title="添加待处理明细">
+                                {{ defect.model }}
+                            </a>
+                        </td>
                         <td>{{ defect.manufacturer }}</td>
                         <td>{{ defect.reason }}</td>
                         <td>{{ defect.defect }}</td>
@@ -70,9 +74,11 @@
                         <td>{{ defect.status }}</td>
                         <td>{{ defect.find_date }}</td>
                         <td>
-                            <a href="{% url 'InfoMG:add_defect_detail' defect.id %}">
-                                <button class="btn btn-primary">添加记录</button>
-                            </a>
+                            {% if defect.all_details_count == 0 %}
+                                无待处理明细
+                            {% else %}
+                                {{ defect.solved_details_count }}/{{ defect.all_details_count }}
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
